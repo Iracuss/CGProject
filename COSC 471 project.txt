@@ -1,0 +1,130 @@
+﻿Project “RENDERING” 
+
+
+By: Hossein Fares , Christian Cuevas, Abraham Villacorta
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Objective:
+
+
+This project objective is to design and create a real-time 3D rendering project that shows the basic steps of computer graphics. The objective of the project is to design a  visually striking scene that demonstrates the interplay of objects, lighting, and camera angles in generating a rendered image.
+
+
+Another objective is to create a 3D environment populated with fundamental geometric shapes like cubes, spheres, and planes. These items will serve to illustrate the construction and presentation of various components in a scene within a rendering system.
+
+
+The project seeks to apply fundamental lighting methods such as ambient and point lighting to demonstrate the interaction between light and objects. This will help in demonstrating how illumination impacts color, shading, and the overall visual look of a scene.
+
+
+The project will integrate camera features to enable viewing the scene from various angles. This will show how the positioning and movement of the camera affect what can be seen in a rendered environment.
+
+
+Lastly, the project aims to facilitate straightforward user interactions like modifying the lighting strength or camera placement while bolstering comprehension of fundamental rendering principles such as shading, materials, and scene composition.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Project description:
+
+
+
+
+The aim of this project is to create a real-time 3D rendering application that presents a basic interactive scene. The system will create basic geometric shapes like cubes, spheres, and planes in a virtual setting. The aim is to show how rendering techniques contribute to the creation of visually realistic scenes in computer graphics.
+
+
+The application will integrate basic lighting methods, such as ambient and point lighting, to replicate the way light interacts with objects. Users can modify settings like light intensity, object color, and camera position to see how the rendered scene changes.
+
+
+A graphics tool like OpenGL will be used to implement the project, enabling efficient development and real-time visualization. The end result will consist of a completely rendered 3D scene that showcases the impact of lighting, materials, and camera perspective on rendering.
+
+
+This project highlights simplicity while showcasing essential rendering concepts, making it a practical tool for grasping fundamental computer graphics principles.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                The Problem: 
+The problem is about rendering an object in real time with good shading options. Being able to use OpenGL will help with that but also being able to see the object in the set lighting prefixed beforehand. There are other options like using ray tracing on the lights but the goal is to be simple. The goal is to allow the user to display an image of an object and be able to fly around the scene and look at said object. Making a camera move around in real time and display an object at a stable framerate can be tricky depending on what is being asked to display. Being able to control the lighting as well even just a little bit with a slider could be a good addition to see a shaded object in real time change.
+
+
+
+
+Timeline:
+
+
+Week 1-2
+	Research the topic and what libraries are needed to complete the project and open the repository to work on.
+	Week 2-3
+	Work on the rendering of the object with no shading at all. Be able to move a camera around the hard coded object like a cube.
+	Week 3-4
+	Make shaders that allow for lighting and make presets of what lightings can be used and chosen. Also work on parsing obj files and rendering files put in a certain directory.
+	Week 4-5
+	Allow the ability to add textures onto objects and maybe even choose between textures if wanted.
+	Week 5-6
+	This is where all the testing will happen and make sure nothing is completely broken. Should be able to choose lighting options and or move the light and see the object clearly with camera movement.

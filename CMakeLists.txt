@@ -7,12 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # --------------------------------
 # GLFW
 # --------------------------------
-add_subdirectory(libs/glfw)
+find_package(glfw3 REQUIRED)
 
 # --------------------------------
 # Assimp
 # --------------------------------
-add_subdirectory(libs/assimp)
+find_package(assimp REQUIRED)
 
 # --------------------------------
 # GLAD
@@ -38,7 +38,9 @@ target_include_directories(render_engine PRIVATE libs/assimp/include)
 # --------------------------------
 # GLM (header-only)
 # --------------------------------
-target_include_directories(render_engine PUBLIC libs/glm)
+find_package(glm REQUIRED)
+
+target_link_libraries(render_engine PUBLIC glm::glm)
 
 # --------------------------------
 # STB (header-only)
@@ -49,7 +51,7 @@ target_include_directories(render_engine PUBLIC libs/stb)
 # Link libs
 # --------------------------------
 target_link_libraries(render_engine PRIVATE
-    assimp
+    assimp::assimp
     glfw
     glad
 )

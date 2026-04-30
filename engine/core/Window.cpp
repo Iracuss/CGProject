@@ -37,7 +37,7 @@ bool Window::loadGLFWandGlad()
     glfwMakeContextCurrent(window);
 
     // keep this here maybe
-    glfwSetWindowUserPointer(window, &render.renderCamera);
+    glfwSetWindowUserPointer(window, &render);
 
     // load GLAD
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))

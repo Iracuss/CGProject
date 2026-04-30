@@ -14,7 +14,7 @@ glm::mat4 aiMatrix4x4ToGlm(const aiMatrix4x4& from)
 }
 
 
-Model::Model(char* path, bool gamma) : gammaCorrection(gamma)
+Model::Model(const std::string& path, bool gamma) : gammaCorrection(gamma)
 {
     loadModel(path);
 }
@@ -100,6 +100,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
             vertex.texCoords = glm::vec2(0.0f, 0.0f);
         }
 
+        vertex.color = glm::vec3(1.0f);
         vertices.push_back(vertex);
     }
 

@@ -1,11 +1,13 @@
 #include "Camera.hpp"
+#include "../graphics/Renderer.hpp"
 
 // This should go into an input class
 void Camera::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
+    Renderer* renderer = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
+    if(!renderer) return;
 
-    Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
-    if(!camera) return;
+    Camera* camera = &renderer->renderCamera;
 
     if(camera->firstMouse)
     {
@@ -49,6 +51,11 @@ glm::mat4 Camera::cameraView()
         cameraUp
     );
     return view;
+}
+
+glm::vec3 Camera::getPosition() const
+{
+    return cameraPos;
 }
 
 // Probably want this to be in a input.cpp file

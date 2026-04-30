@@ -16,6 +16,7 @@ public:
 
     static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
     glm::mat4 cameraView();
+    glm::vec3 getPosition() const;
     void processInput(GLFWwindow* window, float deltaTime);
 
 private:

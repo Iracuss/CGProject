@@ -1,6 +1,8 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
+#include <string>
+#include <vector>
 // #include "Texture.hpp"
 #include "Mesh.hpp"
 #include "Shader.hpp"
@@ -11,7 +13,7 @@
 class Model
 {
 public:
-    Model(char* path, bool gamma = false);
+    Model(const std::string& path, bool gamma = false);
     Model();
     ~Model();
 

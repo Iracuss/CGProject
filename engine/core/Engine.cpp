@@ -50,7 +50,7 @@ void Engine::run()
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
 
-            window.render.renderCamera.processInput(window.window, deltaTime);
+            window.render.handleInput(window.window, deltaTime);
 
             //update?
 
