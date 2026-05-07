@@ -4,8 +4,8 @@
  */
 
 import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Grid, Center, ContactShadows, Environment } from '@react-three/drei';
-import { SceneSettings, ObjectType, ParsedOBJ } from '../types';
+import { OrbitControls, PerspectiveCamera, Grid, Center } from '@react-three/drei';
+import { SceneSettings, ObjectType, ParsedOBJ, ShadingModel } from '../types';
 import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
@@ -20,12 +20,28 @@ export interface SceneHandle {
   screenshot: () => void;
 }
 
-function Shape({ type, color, wireframe, roughness, metalness }: {
-  type: ObjectType,
-  color: string,
-  wireframe: boolean,
-  roughness: number,
-  metalness: number
+function ShadedMaterial({ shadingModel, color, wireframe, roughness, metalness }: {
+  shadingModel: ShadingModel;
+  color: string;
+  wireframe: boolean;
+  roughness: number;
+  metalness: number;
+}) {
+  // roughness=0 → shininess=300 (sharp), roughness=1 → shininess=1 (fully matte but non-zero)
+  const shininess = Math.max(1, Math.round((1 - roughness) * 300));
+  if (shadingModel === 'basic')    return <meshBasicMaterial color={color} wireframe={wireframe} />;
+  if (shadingModel === 'lambert')  return <meshLambertMaterial color={color} wireframe={wireframe} />;
+  if (shadingModel === 'phong')    return <meshPhongMaterial color={color} wireframe={wireframe} shininess={shininess} />;
+  return <meshStandardMaterial color={color} wireframe={wireframe} roughness={roughness} metalness={metalness} />;
+}
+
+function Shape({ type, color, wireframe, roughness, metalness, shadingModel }: {
+  type: ObjectType;
+  color: string;
+  wireframe: boolean;
+  roughness: number;
+  metalness: number;
+  shadingModel: ShadingModel;
 }) {
   return (
     <mesh castShadow receiveShadow>
@@ -33,23 +49,18 @@ function Shape({ type, color, wireframe, roughness, metalness }: {
       {type === ObjectType.SPHERE && <sphereGeometry args={[1.5, 32, 32]} />}
       {type === ObjectType.PLANE && <planeGeometry args={[3, 3]} />}
       {type === ObjectType.TORUS && <torusGeometry args={[1.2, 0.4, 16, 100]} />}
-
-      <meshStandardMaterial
-        color={color}
-        wireframe={wireframe}
-        roughness={roughness}
-        metalness={metalness}
-      />
+      <ShadedMaterial shadingModel={shadingModel} color={color} wireframe={wireframe} roughness={roughness} metalness={metalness} />
     </mesh>
   );
 }
 
-function OBJMesh({ objData, color, wireframe, roughness, metalness }: {
+function OBJMesh({ objData, color, wireframe, roughness, metalness, shadingModel }: {
   objData: ParsedOBJ;
   color: string;
   wireframe: boolean;
   roughness: number;
   metalness: number;
+  shadingModel: ShadingModel;
 }) {
   const geometry = useMemo(() => {
     const geom = new THREE.BufferGeometry();
@@ -83,12 +94,7 @@ function OBJMesh({ objData, color, wireframe, roughness, metalness }: {
 
   return (
     <mesh geometry={geometry} castShadow receiveShadow>
-      <meshStandardMaterial
-        color={color}
-        wireframe={wireframe}
-        roughness={roughness}
-        metalness={metalness}
-      />
+      <ShadedMaterial shadingModel={shadingModel} color={color} wireframe={wireframe} roughness={roughness} metalness={metalness} />
     </mesh>
   );
 }
@@ -136,34 +142,34 @@ function SceneInner({ settings, objData, orbitRef, glRef }: SceneProps & {
         {objData ? (
           <OBJMesh
             objData={objData}
-            color={settings.shadedColor ?? settings.objectColor}
+            color={settings.objectColor}
             wireframe={settings.wireframe}
             roughness={settings.roughness}
             metalness={settings.metalness}
+            shadingModel={settings.shadingModel}
           />
         ) : (
           <Shape
             type={settings.objectType}
-            color={settings.shadedColor ?? settings.objectColor}
+            color={settings.objectColor}
             wireframe={settings.wireframe}
             roughness={settings.roughness}
             metalness={settings.metalness}
+            shadingModel={settings.shadingModel}
           />
         )}
       </Center>
 
       <Grid
         infiniteGrid
-        fadeDistance={40}
-        fadeStrength={5}
+        fadeDistance={30}
+        fadeStrength={8}
         sectionSize={2}
-        sectionColor="#a1a1aa"
-        cellColor="#e4e4e7"
+        sectionColor="#2a2a2a"
+        cellColor="#1a1a1a"
       />
-      <ContactShadows resolution={1024} scale={10} blur={2} opacity={0.25} far={10} color="#000000" />
-      <Environment preset="city" />
 
-      <color attach="background" args={['#f8fafc']} />
+      <color attach="background" args={['#0d0d0d']} />
       <ScreenshotCapture glRef={glRef} />
     </>
   );

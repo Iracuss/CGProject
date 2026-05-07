@@ -37,7 +37,7 @@ export default function App() {
   const updateSettings = async (newSettings: Partial<SceneSettings>) => {
     const nextSettings = { ...settings, ...newSettings };
 
-    if (newSettings.objectColor) {
+    if (newSettings.objectColor || newSettings.pointIntensity !== undefined) {
       setPythonProcessing(true);
       try {
         const shadedColor = await runPythonShading(
@@ -80,7 +80,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-slate-50 overflow-hidden font-sans">
+    <div className="relative w-full h-screen bg-[#0d0d0d] overflow-hidden font-sans">
       {/* 3D Viewport */}
       <div className="absolute inset-0 z-0">
         <Scene ref={sceneRef} settings={settings} objData={objStats} />
@@ -99,7 +99,7 @@ export default function App() {
           <div>
             <h1 className="text-xl font-bold text-slate-900 leading-tight">Project RENDERING</h1>
             <div className="flex items-center gap-2">
-              <p className="text-xs text-slate-500 font-medium tracking-wide uppercase">Real-time Python/JS Engine</p>
+              <p className="text-xs text-slate-500 font-medium tracking-wide uppercase">Blinn-Phong · PBR · Three.js</p>
               {(pythonStatus === 'loading' || pythonProcessing) && (
                 <motion.div
                   animate={{ rotate: 360 }}
@@ -183,7 +183,7 @@ export default function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        className="absolute bottom-6 left-6 text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 z-10 mix-blend-multiply"
+        className="absolute bottom-6 left-6 text-[10px] uppercase font-bold tracking-[0.2em] text-white/20 z-10"
       >
         Developed by Hossein F. • Christian C. • Abraham V.
       </motion.div>

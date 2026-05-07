@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export type ShadingModel = 'basic' | 'lambert' | 'phong' | 'standard';
+
 export enum ObjectType {
   CUBE = 'Cube',
   SPHERE = 'Sphere',
@@ -29,11 +31,12 @@ export interface SceneSettings {
   autoRotate: boolean;
   roughness: number;
   metalness: number;
+  shadingModel: ShadingModel;
 }
 
 export const INITIAL_SETTINGS: SceneSettings = {
-  ambientIntensity: 0.5,
-  pointIntensity: 1.5,
+  ambientIntensity: 0.05,
+  pointIntensity: 2.0,
   lightColor: '#ffffff',
   lightPosition: [5, 5, 5],
   objectColor: '#3b82f6', // Tailwind blue-500
@@ -42,4 +45,5 @@ export const INITIAL_SETTINGS: SceneSettings = {
   autoRotate: false,
   roughness: 0.5,
   metalness: 0.5,
+  shadingModel: 'standard',
 };
