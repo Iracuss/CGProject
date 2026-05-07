@@ -4,7 +4,7 @@
  */
 
 import { motion } from 'motion/react';
-import { Settings, Boxes, Sun, RotateCw, Layers, FileUp, RefreshCw, Camera } from 'lucide-react';
+import { Settings, Boxes, Sun, Moon, RotateCw, Layers, FileUp, RefreshCw, Camera } from 'lucide-react';
 import { SceneSettings, ObjectType, ShadingModel } from '../types';
 
 interface ControlsProps {
@@ -48,8 +48,8 @@ export default function Controls({ settings, setSettings, onFileUpload, onCamera
 
   return (
     <motion.div
-      initial={{ x: 300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       className="absolute right-4 top-4 mt-16 w-80 bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-slate-200 flex flex-col gap-6 max-h-[85vh] overflow-y-auto z-30 pointer-events-auto"
     >
       <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
@@ -59,7 +59,7 @@ export default function Controls({ settings, setSettings, onFileUpload, onCamera
 
       {/* ── Shading Model ─────────────────────────────── */}
       <div className="space-y-3">
-        <label className="text-sm font-medium text-slate-700">Shading Model</label>
+        <p className="text-sm font-medium text-slate-700">Shading Model</p>
         <div className="grid grid-cols-2 gap-2">
           {SHADING_MODELS.map(({ value, label, desc }) => (
             <button
@@ -93,9 +93,9 @@ export default function Controls({ settings, setSettings, onFileUpload, onCamera
 
       {/* ── Geometry ──────────────────────────────────── */}
       <div className="space-y-3">
-        <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+        <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
           <Boxes className="w-4 h-4" /> Geometry
-        </label>
+        </p>
         <div className="grid grid-cols-2 gap-2">
           {Object.values(ObjectType).map((type) => (
             <button
@@ -115,9 +115,9 @@ export default function Controls({ settings, setSettings, onFileUpload, onCamera
 
       {/* ── Load OBJ ──────────────────────────────────── */}
       <div className="space-y-3">
-        <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+        <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
           <FileUp className="w-4 h-4" /> Load OBJ Mesh
-        </label>
+        </p>
         <div className="bg-slate-50 p-4 rounded-xl">
           <label className="w-full flex flex-col items-center px-4 py-3 bg-white text-blue-600 rounded-lg shadow-sm border border-blue-100 cursor-pointer hover:bg-blue-50 transition-colors">
             <FileUp className="w-5 h-5 mb-1" />
@@ -130,9 +130,27 @@ export default function Controls({ settings, setSettings, onFileUpload, onCamera
 
       {/* ── Lighting ──────────────────────────────────── */}
       <div className="space-y-3">
-        <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+        <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
           <Sun className="w-4 h-4" /> Lighting
-        </label>
+        </p>
+
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-sm text-slate-600">Bright Mode</span>
+            <p className="text-[10px] text-slate-400">Turn the lights back on</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSettings({ brightMode: !settings.brightMode })}
+            className={`w-12 h-6 rounded-full transition-colors relative ${settings.brightMode ? 'bg-amber-400' : 'bg-slate-300'}`}
+          >
+            <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform flex items-center justify-center ${settings.brightMode ? 'translate-x-6' : ''}`}>
+              {settings.brightMode
+                ? <Sun className="w-2.5 h-2.5 text-amber-500" />
+                : <Moon className="w-2.5 h-2.5 text-slate-400" />}
+            </div>
+          </button>
+        </div>
 
         <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
           <div className="text-[10px] font-semibold text-blue-700 mb-0.5">Illumination Equation</div>
@@ -205,9 +223,9 @@ export default function Controls({ settings, setSettings, onFileUpload, onCamera
 
       {/* ── Material Properties ───────────────────────── */}
       <div className="space-y-3">
-        <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+        <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
           <Layers className="w-4 h-4" /> Material Properties
-        </label>
+        </p>
         <div className="space-y-4 bg-slate-50 p-4 rounded-xl">
           <div>
             <div className="flex items-center justify-between">
@@ -228,6 +246,7 @@ export default function Controls({ settings, setSettings, onFileUpload, onCamera
               <p className="text-[10px] text-slate-400">Exposes mesh edge topology</p>
             </div>
             <button
+              type="button"
               onClick={() => setSettings({ wireframe: !settings.wireframe })}
               className={`w-12 h-6 rounded-full transition-colors relative ${settings.wireframe ? 'bg-blue-600' : 'bg-slate-300'}`}
             >
@@ -271,13 +290,14 @@ export default function Controls({ settings, setSettings, onFileUpload, onCamera
 
       {/* ── Camera ────────────────────────────────────── */}
       <div className="space-y-3">
-        <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+        <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
           <RotateCw className="w-4 h-4" /> Camera
-        </label>
+        </p>
         <div className="space-y-2 bg-slate-50 p-4 rounded-xl">
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-600">Auto-Rotate</span>
             <button
+              type="button"
               onClick={() => setSettings({ autoRotate: !settings.autoRotate })}
               className={`w-12 h-6 rounded-full transition-colors relative ${settings.autoRotate ? 'bg-blue-600' : 'bg-slate-300'}`}
             >

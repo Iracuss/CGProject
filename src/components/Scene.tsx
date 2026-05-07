@@ -27,12 +27,16 @@ function ShadedMaterial({ shadingModel, color, wireframe, roughness, metalness }
   roughness: number;
   metalness: number;
 }) {
+  // Wireframe always uses unlit material — lit wireframe runs N·L on edge geometry,
+  // producing completely different shading than the solid mesh and making it look
+  // like the global lighting changed.
+  if (wireframe) return <meshBasicMaterial color={color} wireframe />;
   // roughness=0 → shininess=300 (sharp), roughness=1 → shininess=1 (fully matte but non-zero)
   const shininess = Math.max(1, Math.round((1 - roughness) * 300));
-  if (shadingModel === 'basic')    return <meshBasicMaterial color={color} wireframe={wireframe} />;
-  if (shadingModel === 'lambert')  return <meshLambertMaterial color={color} wireframe={wireframe} />;
-  if (shadingModel === 'phong')    return <meshPhongMaterial color={color} wireframe={wireframe} shininess={shininess} />;
-  return <meshStandardMaterial color={color} wireframe={wireframe} roughness={roughness} metalness={metalness} />;
+  if (shadingModel === 'basic')    return <meshBasicMaterial color={color} />;
+  if (shadingModel === 'lambert')  return <meshLambertMaterial color={color} />;
+  if (shadingModel === 'phong')    return <meshPhongMaterial color={color} shininess={shininess} />;
+  return <meshStandardMaterial color={color} roughness={roughness} metalness={metalness} />;
 }
 
 function Shape({ type, color, wireframe, roughness, metalness, shadingModel }: {
@@ -165,11 +169,11 @@ function SceneInner({ settings, objData, orbitRef, glRef }: SceneProps & {
         fadeDistance={30}
         fadeStrength={8}
         sectionSize={2}
-        sectionColor="#2a2a2a"
-        cellColor="#1a1a1a"
+        sectionColor={settings.brightMode ? '#aaaaaa' : '#2a2a2a'}
+        cellColor={settings.brightMode ? '#cccccc' : '#1a1a1a'}
       />
 
-      <color attach="background" args={['#0d0d0d']} />
+      <color attach="background" args={[settings.brightMode ? '#f8fafc' : '#0d0d0d']} />
       <ScreenshotCapture glRef={glRef} />
     </>
   );

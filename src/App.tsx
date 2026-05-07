@@ -34,25 +34,21 @@ export default function App() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  const updateSettings = async (newSettings: Partial<SceneSettings>) => {
-    const nextSettings = { ...settings, ...newSettings };
+  const updateSettings = (newSettings: Partial<SceneSettings>) => {
+    // Apply the change immediately using a functional update so we never
+    // read stale closure state — this is what caused brightMode/ambientIntensity
+    // to get overwritten by pending async calls.
+    setSettingsState(s => ({ ...s, ...newSettings }));
 
-    if (newSettings.objectColor || newSettings.pointIntensity !== undefined) {
+    if (newSettings.objectColor !== undefined || newSettings.pointIntensity !== undefined) {
+      const intensityToUse = newSettings.pointIntensity ?? settings.pointIntensity;
+      const colorToUse = newSettings.objectColor ?? settings.objectColor;
       setPythonProcessing(true);
-      try {
-        const shadedColor = await runPythonShading(
-          nextSettings.pointIntensity,
-          nextSettings.objectColor
-        );
-        nextSettings.shadedColor = shadedColor;
-      } catch (e) {
-        console.error('Python shading error:', e);
-      } finally {
-        setPythonProcessing(false);
-      }
+      runPythonShading(intensityToUse, colorToUse)
+        .then(shadedColor => setSettingsState(s => ({ ...s, shadedColor })))
+        .catch(e => console.error('Python shading error:', e))
+        .finally(() => setPythonProcessing(false));
     }
-
-    setSettingsState(nextSettings);
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +76,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-[#0d0d0d] overflow-hidden font-sans">
+    <div className={`relative w-full h-screen overflow-hidden font-sans ${settings.brightMode ? 'bg-slate-50' : 'bg-[#0d0d0d]'}`}>
       {/* 3D Viewport */}
       <div className="absolute inset-0 z-0">
         <Scene ref={sceneRef} settings={settings} objData={objStats} />

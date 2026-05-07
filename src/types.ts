@@ -32,6 +32,7 @@ export interface SceneSettings {
   roughness: number;
   metalness: number;
   shadingModel: ShadingModel;
+  brightMode: boolean;
 }
 
 export const INITIAL_SETTINGS: SceneSettings = {
@@ -46,4 +47,5 @@ export const INITIAL_SETTINGS: SceneSettings = {
   roughness: 0.5,
   metalness: 0.5,
   shadingModel: 'standard',
+  brightMode: false,
 };
