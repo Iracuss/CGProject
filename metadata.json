@@ -1,0 +1,6 @@
+{
+  "name": "Project Rendering",
+  "description": "A real-time 3D rendering application demonstrating computer graphics principles like lighting, shading, and camera movement.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
